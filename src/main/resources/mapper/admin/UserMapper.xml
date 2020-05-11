@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leesoft.admin.mappers.AccountMapper">
+
+    <resultMap id="AccountInfoMap" type="com.leesoft.admin.models.AccountInfo">
+        <result column="id" property="id"/>
+        <result column="accountid" property="accountid"/>
+        <result column="password" property="password"/>
+        <result column="isadmin" property="admin"/>
+        <result column="isblocked" property="blocked"/>
+    </resultMap>
+
+    <resultMap id="AccountInfoDetailMap" type="com.leesoft.admin.models.AccountInfoDetail">
+        <result column="id" property="id"/>
+        <result column="email" property="email"/>
+        <result column="fullname" property="fullname"/>
+        <result column="address" property="address"/>
+        <result column="phone" property="phone"/>
+        <result column="accountid" property="accountid"/>
+    </resultMap>
+
+    <select id="loginAccount"  parameterType="map" resultMap="AccountInfoMap">
+        SELECT * FROM public.account_info where  accountid = #{accountid} and password = #{password}
+    </select>
+
+    <select id="getAccountInfo" parameterType="map" resultMap="AccountInfoDetailMap">
+        SELECT * FROM public.account_info_detail where accountid = #{accountid}
+    </select>
+
+</mapper>

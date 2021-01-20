@@ -1,8 +1,7 @@
 package com.leesoft.admin.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,5 +63,31 @@ public class JwtProvider {
             LOGGER.error(String.format("Can not write %s of %s to JSON string",target.getClass(), fullname), e);
         }
         return jsonData;
+    }
+
+    public boolean validateToken(String authToken) {
+        try {
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            return true;
+        } catch (SignatureException ex) {
+            LOGGER.error("Invalid JWT signature");
+        } catch (MalformedJwtException ex) {
+            LOGGER.error("Invalid JWT token");
+        } catch (ExpiredJwtException ex) {
+            LOGGER.warn("Expired JWT token");
+        } catch (UnsupportedJwtException ex) {
+            LOGGER.error("Unsupported JWT token");
+        } catch (IllegalArgumentException ex) {
+            LOGGER.error("JWT claims string is empty.");
+        }
+        return false;
+    }
+
+    public JwtAccount getJwtUser(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody();
+        return JwtUtils.retrieveUserFromClaims(claims, objectMapper);
     }
 }

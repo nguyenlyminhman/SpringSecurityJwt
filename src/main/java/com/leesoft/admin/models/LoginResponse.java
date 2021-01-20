@@ -2,8 +2,6 @@ package com.leesoft.admin.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Map;
-
 public class LoginResponse {
 
     @JsonProperty("user_info")

@@ -19,7 +19,7 @@ public class JwtProvider {
 
     private static final String jwtSecret = new BigInteger(130, new SecureRandom()).toString(32);
 
-    @Value("24")
+    @Value("8")
     private int jwtExpireHrs;
 
     @Autowired
@@ -28,7 +28,6 @@ public class JwtProvider {
     public boolean validatePassword(String originalPassword, String dbPassword){
         try{
             return originalPassword.equals(dbPassword);
-            // return BCrypt.checkpw(originalPassword, dbPassword);
         }
         catch (Exception e){
             LOGGER.error(e.getMessage());
